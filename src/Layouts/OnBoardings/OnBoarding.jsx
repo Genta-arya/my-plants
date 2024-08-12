@@ -15,7 +15,7 @@ const OnBoarding = ({ navigation }) => {
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
         <View className="flex items-center justify-center">
-          {/* Image */}
+
           <Image
             source={{
               uri: 'https://api.hkks.shop/uploads/onBoarding-1723345183531.png',
@@ -34,11 +34,11 @@ const OnBoarding = ({ navigation }) => {
             </Text>
           </View>
 
-          {/* Action Button */}
+      
           <TouchableOpacity
             style={{
               backgroundColor: '#0FA588',
-              borderRadius: 10, // Ganti dengan ukuran yang diinginkan
+              borderRadius: 10, 
               paddingVertical: 10,
               paddingHorizontal: 20,
               alignItems: 'center',

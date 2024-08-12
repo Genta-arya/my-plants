@@ -1,12 +1,9 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
-import MainSetting from '../../Layouts/Setting/MainSetting';
 import OnBoarding from '../../Layouts/OnBoardings/OnBoarding';
-
 import {MyTabs} from '../Bottom/BottomNavigation';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Import ikon
+import Icon from 'react-native-vector-icons/FontAwesome'; 
 import Search from '../../components/Deteksi';
 import ListHistory from '../../Layouts/Home/History';
 import DetailScreen from '../../components/Detail';
@@ -28,7 +25,7 @@ const AppNavigator = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="detail"
+          name="list"
           component={ListHistory}
           options={({navigation}) => ({
             headerShown: true,
@@ -47,7 +44,7 @@ const AppNavigator = () => {
                 size={20}
                 color="#fff"
                 style={{marginRight: 15}}
-                onPress={() => navigation.navigate('search')} // Arahkan ke layar pencarian
+                onPress={() => navigation.navigate('search')} 
               />
             ),
           })}

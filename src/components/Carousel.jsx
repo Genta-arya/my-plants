@@ -1,18 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Image, Dimensions, Animated, StyleSheet } from 'react-native';
 
-// Menghapus import gambar lokal
-// import image3 from '../Assets/item1.jpeg';
-// import image2 from '../Assets/item4.jpeg';
-// import image1 from '../Assets/item3.png';
+
 
 const { width } = Dimensions.get('window');
 const itemWidth = Math.round(width * 0.9);
 
-// Mengganti gambar lokal dengan URL
 const data = [
   { image: { uri: 'https://api.hkks.shop/uploads/download-(2)-1723346164707.jpeg' } },
-  { image: { uri: 'https://api.hkks.shop/uploads/download-(1)-1723345999031.jpeg' } }, // Ganti dengan URL lain jika ada
+  { image: { uri: 'https://api.hkks.shop/uploads/download-(1)-1723345999031.jpeg' } }, 
   { image: { uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrRRTOfcBvY9NMS9839PpG41My3xaQAthADQ&s' } }, // Ganti dengan URL lain jika ada
 ];
 

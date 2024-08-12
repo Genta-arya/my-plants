@@ -30,8 +30,6 @@ export function MyTabs() {
             iconName = 'camera';
           } else if (route.name === 'info') {
             iconName = 'info';
-          } else if (route.name === 'setting') {
-            iconName = 'gear';
           }
 
           return <TabBarIcon name={iconName} size={size} color={color} />;

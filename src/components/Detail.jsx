@@ -4,7 +4,7 @@ import HistoryList from './HistoryList';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const DetailScreen = ({ route }) => {
-  const { item } = route.params;
+    const { item } = route.params || {};
 
 
   const imageUrl = item.image || 'https://via.placeholder.com/150'; 

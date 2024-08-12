@@ -5,21 +5,21 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-  RefreshControl,
+
 } from 'react-native';
-import { useNavigation, useFocusEffect } from '@react-navigation/native'; // Import useFocusEffect
+import { useNavigation, useFocusEffect } from '@react-navigation/native'; 
 import SkeletonLoading from './skeletonLoading';
 import Indicator from './Indicator';
 import useImageLoadingStore from '../Zustand/ImageLoading';
 import useDataTypeStore from '../Zustand/DataTypeFetch';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HistoryList = props => {
   const { type, title, subTitle } = props;
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [dataCount, setDataCount] = useState(0); // Tambahkan state untuk jumlah data
-  const [refreshing, setRefreshing] = useState(false); // State untuk refresh
+  const [dataCount, setDataCount] = useState(0); 
+  const [refreshing, setRefreshing] = useState(false); 
   const navigation = useNavigation();
   const imageLoading = useImageLoadingStore(state => state.imageLoading);
   const handleImageLoadStart = useImageLoadingStore(state => state.handleImageLoadStart);
@@ -87,7 +87,7 @@ const HistoryList = props => {
   );
 
   return (
-    <View className="flex-1 bg-gray-100 ">
+    <View className="flex-1 bg-gray-100">
       {loading ? (
         <>
           <View className="pb-4 pt-4">
@@ -104,6 +104,15 @@ const HistoryList = props => {
             ItemSeparatorComponent={() => <View style={{ width: 6 }} />}
           />
         </>
+      ) : data.length === 0 ? (  // Kondisi ketika data kosong
+        <View className="flex-1 justify-center items-center">
+          <Text className="text-center text-gray-600">Tidak ada data tersedia.</Text>
+          <Image
+            source={{ uri: placeholderImage }} // Gambar ilustrasi untuk data kosong
+            style={{ width: 150, height: 150, marginTop: 20 }}
+            resizeMode="contain"
+          />
+        </View>
       ) : (
         <>
           <View className="py-4 pt-4 flex flex-row justify-between pr-4">
@@ -113,8 +122,8 @@ const HistoryList = props => {
             </View>
             <TouchableOpacity
               onPress={() => {
-                setDataType(type === 'book' ? 'isBuku' : 'isEBook');
-                navigation.navigate('detail');
+              
+                navigation.navigate('list');
               }}
               className="justify-center">
               <Text className="text-hijau-muda font-bold">Lihat semua</Text>

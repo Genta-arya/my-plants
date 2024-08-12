@@ -131,8 +131,8 @@ const Deteksi = () => {
           },
         };
         setResult(detectionResult);
-        await saveDataToStorage(detectionResult); // Simpan hasil ke AsyncStorage sebagai list
-        showBottomSheet(); // Tampilkan bottom sheet dengan animasi
+        await saveDataToStorage(detectionResult); 
+        showBottomSheet(); 
       } else {
         setResult({ error: response.data.error || 'Terjadi kesalahan' });
       }
