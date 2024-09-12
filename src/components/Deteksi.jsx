@@ -40,14 +40,14 @@ const Deteksi = () => {
   }, []);
 
   const getAddressFromCoordinates = async (latitude, longitude) => {
+    console.log(latitude, longitude);
     try {
       const response = await axios.get(
-        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=jsonv2`,
+        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
       );
-      
 
-      const address = response.data.address.city;
-      
+      const address = response.data.address.county;
+
       setAddress(address);
     } catch (error) {
       console.log('Error fetching address:', error);
@@ -132,6 +132,7 @@ const Deteksi = () => {
           },
         };
         setResult(detectionResult);
+
         await saveDataToStorage(detectionResult);
         showBottomSheet();
       } else {
@@ -141,7 +142,7 @@ const Deteksi = () => {
     } catch (error) {
       setLoading(false);
 
-      setResult({error: 'Terjadi kesalahan saat melakukan pemindaian.'});
+      ToastAndroid.show('Yahh Gagal memproses gambar , silahkan coba lagi', ToastAndroid.SHORT);
     }
   };
 
@@ -232,10 +233,14 @@ const Deteksi = () => {
             <>
               <Text style={styles.resultText}>🧪 Hasil Deteksi</Text>
               <View className="mt-4">
-                <Text>Status: {result?.predicted_class}</Text>
-                <Text>Kondisi: {result?.solution}</Text>
-                <Text>Saran: {result?.info}</Text>
-                <Text>Lokasi: {address}</Text>
+                <Text style={{color: 'black'}}>
+                  Status: {result?.predicted_class}
+                </Text>
+                <Text style={{color: 'black'}}>
+                  Kondisi: {result?.solution}
+                </Text>
+                <Text style={{color: 'black'}}>Saran: {result?.info}</Text>
+                <Text style={{color: 'black'}}>Lokasi: {address}</Text>
               </View>
             </>
           )}

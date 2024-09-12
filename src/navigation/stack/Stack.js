@@ -32,8 +32,10 @@ const AppNavigator = () => {
             animation: 'slide_from_right',
             headerStyle: {
               backgroundColor: '#0FA588',
+              elevation: 0,
+              
             },
-            headerTitle: 'Semua Hasil',
+            headerTitle: '',
             headerTintColor: '#fff',
             headerTitleStyle: {
               fontWeight: 'bold',

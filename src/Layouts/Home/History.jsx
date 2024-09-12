@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SkeletonLoadingList from '../../components/SkeletonLoadingList';
-import {PanGestureHandler} from 'react-native-gesture-handler'; 
-import { useNavigation } from '@react-navigation/native';
+import {PanGestureHandler} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
 
 const ListHistory = () => {
   const [historyItems, setHistoryItems] = useState([]);
@@ -21,7 +21,7 @@ const ListHistory = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const fetchHistory = useCallback(async () => {
     setLoading(true);
     try {
@@ -70,7 +70,6 @@ const ListHistory = () => {
           text: 'Batal',
           style: 'cancel',
           onPress: () => {
-         
             Animated.spring(translateX, {
               toValue: 0,
               useNativeDriver: true,
@@ -104,7 +103,7 @@ const ListHistory = () => {
   };
 
   const renderItem = ({item, index}) => {
-    const translateX = new Animated.Value(0); 
+    const translateX = new Animated.Value(0);
 
     const onGestureEvent = Animated.event(
       [{nativeEvent: {translationX: translateX}}],
@@ -113,15 +112,11 @@ const ListHistory = () => {
 
     const onHandlerStateChange = ({nativeEvent}) => {
       if (nativeEvent.state === 5) {
-
         if (nativeEvent.translationX < -100 && index % 2 === 0) {
-      
           handleDelete(item, translateX);
         } else if (nativeEvent.translationX > 100 && index % 2 !== 0) {
-  
           handleDelete(item, translateX);
         } else {
-
           const swapDirection = nativeEvent.translationX > 0 ? 1 : -1;
           const swapIndex = index + swapDirection;
 
@@ -129,7 +124,6 @@ const ListHistory = () => {
             swapItems(index, swapIndex);
           }
 
-        
           Animated.spring(translateX, {
             toValue: 0,
             useNativeDriver: true,
@@ -165,8 +159,7 @@ const ListHistory = () => {
         onHandlerStateChange={onHandlerStateChange}>
         <Animated.View
           style={[styles.itemContainer, {transform: [{translateX}]}]}>
-          <Pressable
-            onPress={() => navigation.navigate('Detail', {item})}>
+          <Pressable onPress={() => navigation.navigate('Detail', {item})}>
             <Image
               source={{uri: item.image || 'https://via.placeholder.com/150'}}
               style={styles.image}
@@ -191,7 +184,15 @@ const ListHistory = () => {
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         ListFooterComponent={loading && <SkeletonLoadingList />}
-        ListEmptyComponent={<SkeletonLoadingList />}
+        ListEmptyComponent={
+          loading ? (
+            <SkeletonLoadingList />
+          ) : (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>Belum ada hasil deteksi</Text>
+            </View>
+          )
+        }
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -229,6 +230,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingHorizontal: 8,
     paddingBottom: 8,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    textAlign: 'center',
+    marginTop: 16,
+    color: '#4b5563',
+    fontSize: 16,
   },
 });
 
