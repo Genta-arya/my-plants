@@ -41,7 +41,7 @@ const Deteksi = () => {
 
   const getAddressFromCoordinates = async (latitude, longitude) => {
     try {
-      const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=YOUR_API_KEY`);
+      const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}`);
       if (response.data.results.length > 0) {
         const address = response.data.results[0].formatted_address;
         setAddress(address); 
@@ -106,7 +106,7 @@ const Deteksi = () => {
 
     try {
       const response = await axios.post(
-        'http://192.168.0.2:8000/predict',
+        'https://myplants.hkks.shop/predict',
         formData,
         {
           headers: {
