@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,12 +7,13 @@ import {
   Image,
   ActivityIndicator,
   Animated,
+  ToastAndroid,
 } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import image from '../Assets/deteksi.jpeg';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-crop-picker';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -28,28 +29,28 @@ const Deteksi = () => {
   useEffect(() => {
     Geolocation.getCurrentPosition(
       position => {
-        const { latitude, longitude } = position.coords;
-        setLocation({ latitude, longitude });
-        getAddressFromCoordinates(latitude, longitude); // Ambil alamat dari koordinat
+        const {latitude, longitude} = position.coords;
+        setLocation({latitude, longitude});
+
+        getAddressFromCoordinates(latitude, longitude);
       },
-      error => {
-       
-      },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      error => {},
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
     );
   }, []);
 
   const getAddressFromCoordinates = async (latitude, longitude) => {
     try {
-      const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=YOUR_API_KEY`);
-      if (response.data.results.length > 0) {
-        const address = response.data.results[0].formatted_address;
-        setAddress(address); 
-      } else {
-        console.log('Alamat tidak ditemukan');
-      }
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=jsonv2`,
+      );
+      
+
+      const address = response.data.address.city;
+      
+      setAddress(address);
     } catch (error) {
-  
+      console.log('Error fetching address:', error);
     }
   };
 
@@ -69,7 +70,7 @@ const Deteksi = () => {
       });
       console.log('Image URI: ', image.path);
       setSelectedImage(image.path);
-      await AsyncStorage.setItem('selected_image', image.path); 
+      await AsyncStorage.setItem('selected_image', image.path);
     } catch (error) {
       console.log('Camera Error: ', error);
     }
@@ -85,7 +86,7 @@ const Deteksi = () => {
       });
       console.log('Image URI: ', image.path);
       setSelectedImage(image.path);
-      await AsyncStorage.setItem('selected_image', image.path); 
+      await AsyncStorage.setItem('selected_image', image.path);
     } catch (error) {
       console.log('Picker Error: ', error);
     }
@@ -112,13 +113,13 @@ const Deteksi = () => {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-        }
+        },
       );
 
       setLoading(false);
 
       if (response.data && !response.data.error) {
-        const { predicted_class, location, info, solution } = response.data;
+        const {predicted_class, location, info, solution} = response.data;
         const detectionResult = {
           predicted_class,
           solution,
@@ -131,33 +132,28 @@ const Deteksi = () => {
           },
         };
         setResult(detectionResult);
-        await saveDataToStorage(detectionResult); 
-        showBottomSheet(); 
+        await saveDataToStorage(detectionResult);
+        showBottomSheet();
       } else {
-        setResult({ error: response.data.error || 'Terjadi kesalahan' });
+        setResult({error: response.data.error || 'Terjadi kesalahan'});
+        showBottomSheet();
       }
     } catch (error) {
       setLoading(false);
 
-      setResult({ error: 'Terjadi kesalahan saat melakukan pemindaian.' });
+      setResult({error: 'Terjadi kesalahan saat melakukan pemindaian.'});
     }
   };
 
-  const saveDataToStorage = async (result) => {
+  const saveDataToStorage = async result => {
     try {
-  
       const existingData = await AsyncStorage.getItem('deteksi_results');
-      const dataList = existingData ? JSON.parse(existingData) : []; 
+      const dataList = existingData ? JSON.parse(existingData) : [];
 
-    
       dataList.push(result);
 
-     
       await AsyncStorage.setItem('deteksi_results', JSON.stringify(dataList));
-     
-    } catch (error) {
-    
-    }
+    } catch (error) {}
   };
 
   const showBottomSheet = () => {
@@ -185,7 +181,7 @@ const Deteksi = () => {
   });
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <View className="pb-8 pt-2 p-4 bg-hijau-muda flex flex-row items-center gap-4">
         <TouchableOpacity onPress={handleBack}>
           <Icon name="arrow-left" color={'white'} size={15} />
@@ -196,7 +192,7 @@ const Deteksi = () => {
         <TouchableOpacity onPress={openCamera} style={styles.imageContainer}>
           {selectedImage ? (
             <Image
-              source={{ uri: selectedImage }}
+              source={{uri: selectedImage}}
               style={styles.image}
               resizeMode="cover"
             />
@@ -226,11 +222,12 @@ const Deteksi = () => {
         )}
       </View>
 
-      {/* Bottom Sheet dengan Animasi */}
-      <Animated.View style={[styles.bottomSheet, { height: bottomSheetHeight }]}>
+      <Animated.View style={[styles.bottomSheet, {height: bottomSheetHeight}]}>
         <View style={styles.bottomSheetContainer}>
           {result && result.error ? (
-            <Text style={styles.errorText}>{result.error}</Text>
+            <Text style={styles.errorText} className="text-center">
+              {result.error}
+            </Text>
           ) : (
             <>
               <Text style={styles.resultText}>🧪 Hasil Deteksi</Text>
@@ -238,11 +235,13 @@ const Deteksi = () => {
                 <Text>Status: {result?.predicted_class}</Text>
                 <Text>Kondisi: {result?.solution}</Text>
                 <Text>Saran: {result?.info}</Text>
-                <Text>Lokasi: {result?.address}</Text>
+                <Text>Lokasi: {address}</Text>
               </View>
             </>
           )}
-          <TouchableOpacity onPress={closeBottomSheet} style={styles.closeButton}>
+          <TouchableOpacity
+            onPress={closeBottomSheet}
+            style={styles.closeButton}>
             <Text style={styles.closeButtonText}>Tutup</Text>
           </TouchableOpacity>
         </View>

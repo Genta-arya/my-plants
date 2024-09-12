@@ -19,8 +19,8 @@ const MainHome = () => {
           <View className="pl-4">
             <View className="pt-2 pb-20">
               <HistoryList
-                title={'History'}
-                subTitle={'Lihat history hasil deteksi'}
+                title={'Riwayat'}
+                subTitle={'Lihat riwayat hasil deteksi'}
               />
             </View>
           </View>

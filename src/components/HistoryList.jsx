@@ -5,6 +5,7 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
+  Pressable,
 
 } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native'; 
@@ -24,10 +25,6 @@ const HistoryList = props => {
   const imageLoading = useImageLoadingStore(state => state.imageLoading);
   const handleImageLoadStart = useImageLoadingStore(state => state.handleImageLoadStart);
   const handleImageLoadEnd = useImageLoadingStore(state => state.handleImageLoadEnd);
-
-  const { setDataType } = useDataTypeStore(state => ({
-    setDataType: state.setDataType,
-  }));
 
   const getCountOfData = async () => {
     try {
@@ -63,27 +60,24 @@ const HistoryList = props => {
     }, [])
   );
 
-  const handleRefresh = () => {
-    setRefreshing(true); // Set refreshing ke true
-    fetchData(); // Panggil fetchData untuk memuat ulang data
-  };
 
-  const placeholderImage = 'https://via.placeholder.com/150'; // Gambar placeholder
+  const placeholderImage = 'https://via.placeholder.com/150'; 
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => navigation.navigate('Detail', { item })} // Navigasi ke DetailScreen dengan item
+    <Pressable
+  
+      onPress={() => navigation.navigate('Detail', { item })} 
       className="pt-4 mr-2"
     >
       {imageLoading && <Indicator />}
       <Image
-        source={{ uri: item.image ? item.image : placeholderImage }} // Gunakan gambar placeholder jika item.image null
+        source={{ uri: item.image ? item.image : placeholderImage }} 
         className="w-40 h-52 rounded-lg mb-2"
         resizeMode="cover"
         onLoadStart={handleImageLoadStart}
         onLoadEnd={handleImageLoadEnd}
       />
-    </TouchableOpacity>
+    </Pressable>
   );
 
   return (
@@ -104,14 +98,10 @@ const HistoryList = props => {
             ItemSeparatorComponent={() => <View style={{ width: 6 }} />}
           />
         </>
-      ) : data.length === 0 ? (  // Kondisi ketika data kosong
+      ) : data.length === 0 ? (  
         <View className="flex-1 justify-center items-center">
-          <Text className="text-center text-gray-600">Tidak ada data tersedia.</Text>
-          <Image
-            source={{ uri: placeholderImage }} // Gambar ilustrasi untuk data kosong
-            style={{ width: 150, height: 150, marginTop: 20 }}
-            resizeMode="contain"
-          />
+          <Text className="text-center text-gray-600">Belum ada riwayat deteksi</Text>
+        
         </View>
       ) : (
         <>
@@ -120,20 +110,20 @@ const HistoryList = props => {
               <Text className="text-lg font-bold text-black " style={{ fontWeight: 'bold' }}>{title}</Text>
               <Text className="text-xs text-gray-600">{subTitle}</Text>
             </View>
-            <TouchableOpacity
+            <Pressable
               onPress={() => {
               
                 navigation.navigate('list');
               }}
               className="justify-center">
               <Text className="text-hijau-muda font-bold">Lihat semua</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           <FlatList
             data={data}
             renderItem={renderItem}
-            keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())} // Gunakan id jika ada, jika tidak gunakan index
+            keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())} 
             horizontal
             showsHorizontalScrollIndicator={false}
           />

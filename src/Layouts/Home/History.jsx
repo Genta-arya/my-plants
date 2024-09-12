@@ -8,11 +8,11 @@ import {
   RefreshControl,
   Alert,
   Animated,
+  Pressable,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SkeletonLoadingList from '../../components/SkeletonLoadingList';
-import {PanGestureHandler} from 'react-native-gesture-handler'; // Import PanGestureHandler
-import { TouchableOpacity } from '@gorhom/bottom-sheet';
+import {PanGestureHandler} from 'react-native-gesture-handler'; 
 import { useNavigation } from '@react-navigation/native';
 
 const ListHistory = () => {
@@ -70,7 +70,7 @@ const ListHistory = () => {
           text: 'Batal',
           style: 'cancel',
           onPress: () => {
-            // Kembalikan posisi item jika dibatalkan
+         
             Animated.spring(translateX, {
               toValue: 0,
               useNativeDriver: true,
@@ -104,7 +104,7 @@ const ListHistory = () => {
   };
 
   const renderItem = ({item, index}) => {
-    const translateX = new Animated.Value(0); // Value untuk animasi geser
+    const translateX = new Animated.Value(0); 
 
     const onGestureEvent = Animated.event(
       [{nativeEvent: {translationX: translateX}}],
@@ -113,15 +113,15 @@ const ListHistory = () => {
 
     const onHandlerStateChange = ({nativeEvent}) => {
       if (nativeEvent.state === 5) {
-        // Jika geser selesai
+
         if (nativeEvent.translationX < -100 && index % 2 === 0) {
-          // Geser ke kiri
+      
           handleDelete(item, translateX);
         } else if (nativeEvent.translationX > 100 && index % 2 !== 0) {
-          // Geser ke kanan
+  
           handleDelete(item, translateX);
         } else {
-          // Cek untuk pertukaran
+
           const swapDirection = nativeEvent.translationX > 0 ? 1 : -1;
           const swapIndex = index + swapDirection;
 
@@ -129,7 +129,7 @@ const ListHistory = () => {
             swapItems(index, swapIndex);
           }
 
-          // Kembalikan posisi jika tidak dihapus
+        
           Animated.spring(translateX, {
             toValue: 0,
             useNativeDriver: true,
@@ -165,7 +165,7 @@ const ListHistory = () => {
         onHandlerStateChange={onHandlerStateChange}>
         <Animated.View
           style={[styles.itemContainer, {transform: [{translateX}]}]}>
-          <TouchableOpacity
+          <Pressable
             onPress={() => navigation.navigate('Detail', {item})}>
             <Image
               source={{uri: item.image || 'https://via.placeholder.com/150'}}
@@ -175,7 +175,7 @@ const ListHistory = () => {
             <Text style={[styles.title, {color: classColor}]} className="mt-2">
               Kondisi {classText}
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </Animated.View>
       </PanGestureHandler>
     );

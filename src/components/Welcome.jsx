@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import icon from '../Assets/icon.jpeg'; // Pastikan jalur impor sesuai dengan struktur proyek Anda
-import Icon from 'react-native-vector-icons/FontAwesome'; // Pastikan untuk menginstal font-awesome atau sesuaikan dengan ikon lainnya
+import icon from '../Assets/icon.jpeg'; 
+import Icon from 'react-native-vector-icons/FontAwesome'; 
 import ModalInfo from './ModalInfo';
 
 
