@@ -107,7 +107,7 @@ const Deteksi = () => {
 
     try {
       const response = await axios.post(
-        'http://192.168.0.2:8000/predict',
+        'https://myplants.hkks.shop/predict',
         formData,
         {
           headers: {
